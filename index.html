@@ -81,9 +81,9 @@ nav.tabs .in{position:relative;max-width:520px;margin:0 auto;display:grid;grid-t
 nav.tabs .ind{position:absolute;top:0;bottom:0;left:0;width:0;border-radius:14px;background:var(--sauge);box-shadow:inset 0 0 0 1px rgba(52,70,31,.06)}
 nav.tabs .ind.ready{transition:transform .55s cubic-bezier(.34,1.45,.64,1),width .55s cubic-bezier(.34,1.45,.64,1),opacity .3s}
 nav.tabs a{position:relative;z-index:1;overflow:hidden;display:flex;flex-direction:column;align-items:center;gap:3px;text-decoration:none;color:var(--gris);font-size:11px;font-weight:700;padding:6px 0;border-radius:14px;transition:color .35s}
-nav.tabs a svg{width:22px;height:22px;transition:transform .45s cubic-bezier(.34,1.56,.64,1)}
+nav.tabs a .tk{font-family:var(--display);font-weight:700;font-size:17px;line-height:22px;height:22px;transition:transform .45s cubic-bezier(.34,1.56,.64,1)}
 nav.tabs a.on{color:var(--vert)}
-nav.tabs a.on svg{transform:translateY(-1px) scale(1.08)}
+nav.tabs a.on .tk{transform:translateY(-1px) scale(1.08)}
 /* Diagnostic */
 .q{display:flex;flex-direction:column;gap:10px}
 .q legend{font-weight:800;margin-bottom:6px;padding:0}
@@ -472,10 +472,10 @@ header.top{padding-top:max(16px,env(safe-area-inset-top));padding-left:max(16px,
 <canvas id="confetti" aria-hidden="true"></canvas>
 <nav class="tabs" aria-label="Navigation">
   <div class="in">
-    <a href="#accueil" data-v="accueil"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>Accueil</a>
-    <a href="#rituel" data-v="rituel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2M9 2h6"/></svg>Rituel</a>
-    <a href="#programme" data-v="programme"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4M8 15l2 2 4-4"/></svg>Programme</a>
-    <a href="#astuces" data-v="astuces"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A6 6 0 0 0 12 3z"/></svg>Astuces</a>
+    <a href="#accueil" data-v="accueil"><span class="tk" aria-hidden="true">홈</span>Accueil</a>
+    <a href="#rituel" data-v="rituel"><span class="tk" aria-hidden="true">루틴</span>Rituel</a>
+    <a href="#programme" data-v="programme"><span class="tk" aria-hidden="true">8주</span>Programme</a>
+    <a href="#astuces" data-v="astuces"><span class="tk" aria-hidden="true">팁</span>Astuces</a>
   </div>
 </nav>
 
@@ -857,7 +857,7 @@ header.top{padding-top:max(16px,env(safe-area-inset-top));padding-left:max(16px,
   function moveInd(bounce){
     var a=navIn.querySelector("a.on");if(!a){ind.style.opacity="0";return;}
     ind.style.opacity="1";ind.style.width=a.offsetWidth+"px";ind.style.transform="translateX("+a.offsetLeft+"px)";
-    if(bounce&&lastTab&&lastTab!==a)anim(a.querySelector("svg"),[{transform:"translateY(0) scale(1)"},{transform:"translateY(-6px) scale(1.2)"},{transform:"translateY(-1px) scale(1.08)"}],520);
+    if(bounce&&lastTab&&lastTab!==a)anim(a.querySelector(".tk"),[{transform:"translateY(0) scale(1)"},{transform:"translateY(-6px) scale(1.2)"},{transform:"translateY(-1px) scale(1.08)"}],520);
     lastTab=a;
   }
   window.addEventListener("resize",function(){moveInd(false);});
