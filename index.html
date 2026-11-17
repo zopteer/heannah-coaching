@@ -75,7 +75,7 @@ h1 .ko{font-size:14px;margin-bottom:4px}
 .view{display:none}
 .view.on{display:flex}
 .view.leaving{pointer-events:none}
-nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:15;background:rgba(255,255,255,.8);-webkit-backdrop-filter:blur(18px) saturate(1.5);backdrop-filter:blur(18px) saturate(1.5);border-top:1px solid rgba(214,220,201,.7);box-shadow:0 -10px 30px -20px rgba(31,39,22,.35);padding:8px 8px calc(8px + env(safe-area-inset-bottom))}
+nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:15;background:rgba(250,251,247,.97);-webkit-backdrop-filter:blur(18px) saturate(1.5);backdrop-filter:blur(18px) saturate(1.5);border-top:1px solid rgba(214,220,201,.7);box-shadow:0 -10px 30px -20px rgba(31,39,22,.35);padding:8px 8px calc(8px + env(safe-area-inset-bottom))}
 nav.tabs .in{position:relative;max-width:520px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:4px}
 nav.tabs .ind{position:absolute;top:0;bottom:0;left:0;width:0;border-radius:14px;background:var(--sauge);box-shadow:inset 0 0 0 1px rgba(52,70,31,.06)}
 nav.tabs .ind.ready{transition:transform .55s cubic-bezier(.34,1.45,.64,1),width .55s cubic-bezier(.34,1.45,.64,1),opacity .3s}
@@ -265,7 +265,7 @@ header.top{padding-top:max(16px,env(safe-area-inset-top));padding-left:max(16px,
 .dialog{padding-bottom:calc(16px + env(safe-area-inset-bottom))}
 .link{padding:12px 10px;min-height:44px}
 /* Boutons du rituel : collés en bas, juste au-dessus des onglets, toujours à portée de pouce */
-.actions{position:sticky;bottom:calc(78px + env(safe-area-inset-bottom));z-index:6;margin:4px -8px 0;padding:8px;border-radius:20px;background:rgba(244,246,239,.82);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
+.actions{position:sticky;bottom:calc(var(--navh,78px) - 1px);z-index:6;margin:4px -16px 0;padding:10px 16px;background:var(--fond);box-shadow:0 -14px 14px -6px var(--fond)}
 .actions #prevBtn{flex:0 0 auto;width:auto;padding:15px 18px}
 .actions #nextBtn{flex:1;min-width:0}
 /* Petits écrans */
@@ -860,7 +860,10 @@ header.top{padding-top:max(16px,env(safe-area-inset-top));padding-left:max(16px,
     if(bounce&&lastTab&&lastTab!==a)anim(a.querySelector(".tk"),[{transform:"translateY(0) scale(1)"},{transform:"translateY(-6px) scale(1.2)"},{transform:"translateY(-1px) scale(1.08)"}],520);
     lastTab=a;
   }
-  window.addEventListener("resize",function(){moveInd(false);});
+  // Hauteur réelle de la barre d'onglets (zone sûre de l'iPhone comprise) : les boutons du rituel s'y collent sans espace
+  function setNavH(){document.documentElement.style.setProperty("--navh",document.querySelector("nav.tabs").getBoundingClientRect().height+"px");}
+  setNavH();
+  window.addEventListener("resize",function(){moveInd(false);setNavH();});
   if(document.fonts&&document.fonts.ready)document.fonts.ready.then(function(){moveInd(false);});
 
   // Onde au toucher sur tout ce qui se presse
