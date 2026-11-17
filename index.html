@@ -43,8 +43,7 @@ img{max-width:100%;display:block}
 button{font:inherit;cursor:pointer}
 :focus-visible{outline:3px solid var(--vert-doux);outline-offset:2px}
 .app{max-width:520px;margin:0 auto;min-height:100vh;min-height:100dvh;padding:0 16px calc(112px + env(safe-area-inset-bottom))}
-header.top{display:flex;align-items:center;justify-content:space-between;padding:16px 16px 12px;margin:0 -16px;position:sticky;top:0;z-index:10;transition:background .35s,box-shadow .35s,backdrop-filter .35s}
-header.top.scrolled{background:rgba(244,246,239,.78);-webkit-backdrop-filter:blur(14px) saturate(1.4);backdrop-filter:blur(14px) saturate(1.4);box-shadow:0 1px 0 rgba(52,70,31,.08),0 10px 30px -18px rgba(31,39,22,.35)}
+header.top{display:flex;align-items:center;justify-content:space-between;padding:16px 16px 12px;margin:0 -16px;position:relative;z-index:10}
 header.top .logo{animation:fadeDown .8s cubic-bezier(.22,1,.36,1) both}
 header.top .chip{animation:fadeDown .8s .1s cubic-bezier(.22,1,.36,1) both}
 .logo{height:38px;width:auto}
@@ -95,7 +94,7 @@ fieldset{border:0;margin:0;padding:0}
 .opt input:checked::after{transform:scale(1)}
 .opt:has(input:checked){border-color:var(--vert);background:var(--sauge);transform:scale(1.015);box-shadow:0 10px 24px -16px rgba(52,70,31,.6)}
 .opt:active{transform:scale(.985)}
-.diagprog{position:sticky;top:66px;z-index:5;padding:10px 14px;border-radius:14px;background:rgba(255,255,255,.78);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border:1px solid rgba(214,220,201,.7);display:flex;flex-direction:column;gap:6px}
+.diagprog{position:sticky;top:10px;z-index:5;padding:10px 14px;border-radius:14px;background:rgba(255,255,255,.78);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border:1px solid rgba(214,220,201,.7);display:flex;flex-direction:column;gap:6px}
 .q.miss legend{color:#8A2E1F}
 .q.miss{animation:shake .45s cubic-bezier(.36,.07,.19,.97)}
 .result li{margin-bottom:6px}
