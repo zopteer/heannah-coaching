@@ -239,9 +239,13 @@ ol.err li{margin-bottom:6px}
 .head.fin .tool{opacity:0}
 .head .orb,.head .tl{animation:orbit 1.3s linear infinite;animation-play-state:paused}
 .head .tl{animation-direction:reverse}
-.head .swirl{animation:orbit 7s linear infinite;animation-play-state:paused;opacity:.5;transition:opacity .4s}
-.head.run .orb,.head.run .tl,.head.run .swirl{animation-play-state:running}
-.head.run .swirl{opacity:1}
+.head.run .orb,.head.run .tl{animation-play-state:running}
+.head .trail{fill:none;stroke:#fff;stroke-width:3;stroke-linecap:round;stroke-dasharray:30 100;opacity:.8}
+.head .pt{fill:#fff;filter:drop-shadow(0 0 4px rgba(255,255,255,.95)) drop-shadow(0 1px 2px rgba(31,39,22,.4))}
+.head .rip{fill:none;stroke:#fff;stroke-width:2;opacity:0;transform-box:fill-box;transform-origin:center}
+.head.run .rip{animation:rip 1.8s ease-out infinite}
+.head.run .r2{animation-delay:.9s}
+@keyframes rip{from{transform:scale(.7);opacity:.75}to{transform:scale(2.8);opacity:0}}
 @keyframes orbit{to{transform:rotate(360deg)}}
 @keyframes hglow{0%,100%{transform:scale(.85)}50%{transform:scale(1.12)}}
 
@@ -688,7 +692,6 @@ header.top{padding-top:max(16px,env(safe-area-inset-top));padding-left:max(16px,
   function headSVG(){
     var zones=HZ.map(function(z){return "<g class='hz' style='transform:translate("+z[0]+"px,"+z[1]+"px)'><circle class='glow' r='34' fill='url(#hg)'/><circle class='dot' r='9'/><path class='ck2' d='M-4 0l3 3 5-6' fill='none' stroke='#fff' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/></g>";}).join("");
     var labels=HL.map(function(l,i){return "<text class='hl' x='"+l[0]+"' y='"+l[1]+"' text-anchor='middle'>"+MZ[i].n+"</text>";}).join("");
-    var fingers="<g fill='#EBCBA9' stroke='#B98B62' stroke-width='1.5'><ellipse cx='-13' cy='3' rx='5.5' ry='8'/><ellipse cx='-4.5' cy='-2' rx='5.5' ry='9'/><ellipse cx='4.5' cy='-2' rx='5.5' ry='9'/><ellipse cx='13' cy='3' rx='5.5' ry='8'/></g>";
     var picots="";for(var r=-1;r<=1;r++)for(var c=-2;c<=2;c++)picots+="<circle cx='"+(c*6+(r===0?3:0))+"' cy='"+(r*6)+"' r='1.9'/>";
     var brush="<g><rect x='-18' y='-14' width='36' height='28' rx='13' fill='#EDE3CF' stroke='#BFAF8C' stroke-width='1.5'/><g fill='#C7B58C'>"+picots+"</g></g>";
     return "<svg class='head' id='head' viewBox='-16 0 352 270' role='img' aria-label='Zone à masser'>"+
@@ -700,8 +703,9 @@ header.top{padding-top:max(16px,env(safe-area-inset-top));padding-left:max(16px,
       "<path d='M160 36c54 0 84 42 84 92 0 42-24 74-84 78-60-4-84-36-84-78 0-50 30-92 84-92z' fill='#5B4636'/>"+
       "<g fill='none' stroke='#71594A' stroke-width='2' stroke-linecap='round' opacity='.8'><path d='M160 44c-6 50-6 110 0 156'/><path d='M136 50c-22 40-26 96-14 140'/><path d='M184 50c22 40 26 96 14 140'/><path d='M112 66c-20 32-24 76-14 112'/><path d='M208 66c20 32 24 76 14 112'/></g>"+
       zones+labels+
-      "<g class='tool' style='transform:translate("+HZ[0][0]+"px,"+HZ[0][1]+"px)'><circle class='swirl' r='24' fill='none' stroke='#fff' stroke-width='2' stroke-dasharray='4 7' stroke-linecap='round'/>"+
-      "<g class='orb'><g transform='translate(8 0)'><g class='tl'>"+(tool==="doigts"?fingers:brush)+"</g></g></g></g>"+
+      "<g class='tool' style='transform:translate("+HZ[0][0]+"px,"+HZ[0][1]+"px)'><circle class='rip' r='10'/><circle class='rip r2' r='10'/>"+
+      (tool==="doigts"?"<g class='orb'><circle class='trail' r='15' transform='rotate(-115)'/><circle class='pt' cx='15' r='6.5'/></g>"
+        :"<g class='orb'><circle class='trail' r='15' transform='rotate(-115)'/><g transform='translate(12 0)'><g class='tl'>"+brush+"</g></g></g>")+"</g>"+
       "</svg>";
   }
   function paintHead(k){
