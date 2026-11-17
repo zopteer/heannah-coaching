@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#34461F">
+<link rel="icon" href="img/logo-vert.svg">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Coaching Heannah</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Nanum+Gothic:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* Monde de marque Heannah : vert olive du logo, fond vert très pâle, une seule colonne façon app mobile avec barre d'onglets */
+  --vert:#34461F;
+  --vert-doux:#5C6E43;
+  --sauge:#E3E8D6;
+  --fond:#F4F6EF;
+  --carte:#FFFFFF;
+  --encre:#1F2716;
+  --gris:#5F6857;
+  --ligne:#D6DCC9;
+  --ok:#3E7B3A;
+  --display:"Nanum Myeongjo", "Times New Roman", serif;
+  --body:"Nanum Gothic", "Helvetica Neue", Arial, sans-serif;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--fond);color:var(--encre);font-family:var(--body);font-size:16px;line-height:1.55}
+img{max-width:100%;display:block}
+button{font:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--vert-doux);outline-offset:2px}
+.app{max-width:520px;margin:0 auto;min-height:100vh;padding:0 16px 104px}
+header.top{display:flex;align-items:center;justify-content:space-between;padding:18px 0 12px}
+.logo{height:38px;width:auto}
+.chip{font-size:12px;font-weight:700;padding:5px 10px;border-radius:99px;background:var(--sauge);color:var(--vert)}
+h1,h2,h3{font-family:var(--display);color:var(--vert);text-wrap:balance;margin:0}
+h1{font-size:28px;line-height:1.2}
+h2{font-size:22px;line-height:1.25}
+h3{font-size:17px}
+p{margin:0}
+.muted{color:var(--gris)}
+.stack{display:flex;flex-direction:column;gap:16px}
+.card{background:var(--carte);border:1px solid var(--ligne);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:12px}
+.hero{border-radius:20px;overflow:hidden;position:relative}
+.hero img{width:100%;aspect-ratio:4/3;object-fit:cover}
+.hero .over{position:absolute;inset:auto 0 0 0;padding:18px;background:linear-gradient(transparent,rgba(20,28,12,.78));color:#fff}
+.hero .over h1{color:#fff}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;border:0;border-radius:12px;padding:15px 18px;font-weight:800;background:var(--vert);color:#fff;text-decoration:none;font-size:16px}
+.btn.ghost{background:transparent;color:var(--vert);border:1.5px solid var(--vert)}
+.btn:disabled{opacity:.45;cursor:default}
+.row{display:flex;gap:12px;align-items:center}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.stat{background:var(--sauge);border-radius:14px;padding:14px}
+.stat b{display:block;font-family:var(--display);font-size:26px;color:var(--vert);font-variant-numeric:tabular-nums}
+.stat span{font-size:13px;color:var(--gris)}
+.bar{height:8px;border-radius:99px;background:var(--sauge);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--vert);border-radius:99px;transition:width .4s}
+.view{display:none}
+.view.on{display:flex}
+nav.tabs{position:fixed;left:0;right:0;bottom:0;background:var(--carte);border-top:1px solid var(--ligne);padding:8px 8px calc(8px + env(safe-area-inset-bottom))}
+nav.tabs .in{max-width:520px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:4px}
+nav.tabs a{display:flex;flex-direction:column;align-items:center;gap:3px;text-decoration:none;color:var(--gris);font-size:11px;font-weight:700;padding:6px 0;border-radius:10px}
+nav.tabs a svg{width:22px;height:22px}
+nav.tabs a.on{color:var(--vert);background:var(--sauge)}
+/* Diagnostic */
+.q{display:flex;flex-direction:column;gap:10px}
+.q legend{font-weight:800;margin-bottom:6px;padding:0}
+fieldset{border:0;margin:0;padding:0}
+.opt{display:flex;gap:12px;align-items:center;padding:13px 14px;border:1.5px solid var(--ligne);border-radius:12px;background:var(--carte)}
+.opt input{accent-color:var(--vert);width:18px;height:18px;margin:0}
+.opt:has(input:checked){border-color:var(--vert);background:var(--sauge)}
+.result li{margin-bottom:6px}
+.result ul{margin:0;padding-left:20px}
+/* Rituel */
+.steps-dots{display:flex;gap:6px}
+.steps-dots i{flex:1;height:5px;border-radius:99px;background:var(--ligne)}
+.steps-dots i.on{background:var(--vert)}
+.stepimg{border-radius:16px;width:100%;aspect-ratio:442/376;object-fit:cover}
+.zones{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.zone{display:flex;align-items:center;gap:8px;border:1.5px solid var(--ligne);border-radius:10px;padding:10px;background:var(--carte);font-weight:700;font-size:14px;color:var(--encre)}
+.zone[aria-pressed="true"]{border-color:var(--vert);background:var(--sauge);color:var(--vert)}
+.zone .ck{width:18px;height:18px;border-radius:50%;border:2px solid var(--ligne);flex:none}
+.zone[aria-pressed="true"] .ck{background:var(--vert);border-color:var(--vert)}
+.timer{display:grid;grid-template-columns:150px 1fr;gap:16px;align-items:center}
+.ring{position:relative;width:150px;height:150px}
+.ring svg{width:150px;height:150px;transform:rotate(-90deg)}
+.ring .t{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ring .t b{font-family:var(--display);font-size:32px;color:var(--vert);font-variant-numeric:tabular-nums}
+.ring .t span{font-size:12px;color:var(--gris);font-weight:700}
+.zlist{display:flex;flex-direction:column;gap:6px;margin:0;padding:0;list-style:none}
+.zlist li{display:flex;justify-content:space-between;padding:8px 10px;border-radius:9px;font-size:14px;font-weight:700;color:var(--gris);background:var(--fond)}
+.zlist li.now{background:var(--vert);color:#fff}
+.zlist li.done{color:var(--ok)}
+.note{border-left:4px solid var(--vert-doux);background:var(--sauge);padding:12px 14px;border-radius:0 12px 12px 0;font-size:14px}
+.toggle{display:grid;grid-template-columns:1fr 1fr;background:var(--sauge);border-radius:12px;padding:4px;gap:4px}
+.toggle button{border:0;border-radius:9px;padding:9px;font-weight:800;background:transparent;color:var(--vert-doux);font-size:14px}
+.toggle button[aria-pressed="true"]{background:var(--carte);color:var(--vert)}
+/* Programme */
+.week{display:grid;grid-template-columns:42px 1fr auto;gap:12px;align-items:center;background:var(--carte);border:1px solid var(--ligne);border-radius:14px;padding:12px 14px}
+.week .n{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:800;color:var(--vert);background:var(--sauge)}
+.week.done .n{background:var(--vert);color:#fff}
+.week.now{border:2px solid var(--vert)}
+.week.later{opacity:.6}
+.week p{font-size:13px;color:var(--gris)}
+.week .count{font-size:13px;font-weight:800;color:var(--vert);font-variant-numeric:tabular-nums;white-space:nowrap}
+.tip{font-size:13px;margin-top:4px;color:var(--encre)}
+/* Astuces */
+details{background:var(--carte);border:1px solid var(--ligne);border-radius:12px;padding:0 14px}
+summary{padding:14px 0;font-weight:800;cursor:pointer;color:var(--vert);list-style:none;display:flex;justify-content:space-between;gap:10px}
+summary::after{content:"+";font-size:20px;line-height:1}
+details[open] summary::after{content:"–"}
+details > div{padding:0 0 14px;color:var(--encre)}
+.duo{display:grid;grid-template-columns:110px 1fr;gap:14px;align-items:center}
+.duo img{border-radius:12px;aspect-ratio:1;object-fit:cover}
+ol.err{margin:0;padding-left:20px}
+ol.err li{margin-bottom:6px}
+.done-screen{text-align:center;align-items:center}
+.big{font-family:var(--display);font-size:56px;color:var(--vert);line-height:1}
+.dialog{position:fixed;inset:0;background:rgba(20,28,12,.5);display:none;align-items:flex-end;justify-content:center;padding:16px;z-index:20}
+.dialog.on{display:flex}
+.dialog .card{max-width:488px;width:100%}
+/* Animations */
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes zoom{from{transform:scale(1.1)}to{transform:scale(1)}}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(52,70,31,.35)}100%{box-shadow:0 0 0 22px rgba(52,70,31,0)}}
+@keyframes pop{0%{transform:scale(.4)}70%{transform:scale(1.15)}100%{transform:scale(1)}}
+@keyframes shine{from{background-position:-200% 0}to{background-position:200% 0}}
+.view.on > *{animation:rise .5s cubic-bezier(.2,.7,.2,1) both}
+.view.on > *:nth-child(2){animation-delay:.06s}
+.view.on > *:nth-child(3){animation-delay:.12s}
+.view.on > *:nth-child(4){animation-delay:.18s}
+.view.on > *:nth-child(5){animation-delay:.24s}
+.view.on > *:nth-child(n+6){animation-delay:.3s}
+#stepBody > *{animation:rise .45s cubic-bezier(.2,.7,.2,1) both}
+#stepBody > *:nth-child(2){animation-delay:.07s}
+#stepBody > *:nth-child(3){animation-delay:.14s}
+.hero img{animation:zoom 12s ease-out both}
+.btn{transition:transform .15s, background .2s}
+.btn:active{transform:scale(.97)}
+.btn.shine{background:linear-gradient(110deg,var(--vert) 40%,#55693A 50%,var(--vert) 60%);background-size:200% 100%;animation:shine 3s linear infinite}
+.ring{border-radius:50%}
+.ring.run{animation:pulse 1.6s ease-out infinite}
+#rg{transition:stroke-dashoffset 1s linear}
+.zlist li{transition:background .35s,color .35s,transform .35s}
+.zlist li.now{transform:translateX(4px)}
+.steps-dots i{transition:background .4s}
+.zone{transition:background .2s,border-color .2s}
+.zone[aria-pressed="true"] .ck{animation:pop .3s both}
+.week.done .n{animation:pop .45s both}
+.badges{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.badge{display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;font-size:11px;font-weight:700;color:var(--gris)}
+.badge .b{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--ligne);color:#fff;font-family:var(--display);font-weight:800;font-size:18px}
+.badge.on{color:var(--vert)}
+.badge.on .b{background:var(--vert);animation:pop .5s both}
+.next{display:flex;gap:12px;align-items:center;background:var(--vert);color:#fff;border-radius:14px;padding:14px 16px}
+.next .d{font-family:var(--display);font-size:22px;font-weight:800;line-height:1.1}
+.next small{display:block;opacity:.8;font-size:12px;font-weight:700}
+.shop{background:var(--sauge);border:0}
+#confetti{position:fixed;inset:0;pointer-events:none;z-index:30}
+.link{background:none;border:0;color:var(--gris);text-decoration:underline;font-size:13px;padding:6px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <a href="https://heannah.com"><img class="logo" src="img/logo-vert.svg" alt="Heannah Korean Hair"></a>
+    <span class="chip" id="chipWeek">Semaine 1 / 8</span>
+  </header>
+
+  <!-- ACCUEIL -->
+  <section class="view stack" id="v-accueil">
+    <div class="hero">
+      <img src="img/hero.jpg" alt="Deux savons Heannah sur une plaque de marbre">
+      <div class="over stack" style="gap:6px">
+        <h1>Ton coaching Heannah</h1>
+        <p>8 semaines pour installer le rituel coréen du cuir chevelu.</p>
+      </div>
+    </div>
+
+    <a class="next" href="#rituel" id="nextCard" style="text-decoration:none">
+      <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>
+      <div><small>Prochain lavage conseillé</small><div class="d" id="nextDate">Aujourd'hui</div></div>
+    </a>
+
+    <div class="card" id="cardDiag">
+      <h3>Étape 1 : ton diagnostic</h3>
+      <p class="muted">4 questions, 1 minute. On adapte ta fréquence de lavage et ton massage à tes cheveux.</p>
+      <a class="btn" href="#diagnostic">Faire mon diagnostic</a>
+    </div>
+
+    <div class="card">
+      <div class="row" style="justify-content:space-between">
+        <h3>Cette semaine</h3>
+        <span class="chip" id="phaseChip">Démarrage</span>
+      </div>
+      <div class="stats">
+        <div class="stat"><b id="sWeek">0 / 2</b><span>lavages guidés</span></div>
+        <div class="stat"><b id="sTotal">0</b><span>lavages au total</span></div>
+      </div>
+      <div class="stack" style="gap:6px">
+        <div class="row" style="justify-content:space-between;font-size:13px"><span class="muted">Programme 8 semaines</span><b id="sPct" style="color:var(--vert)">0 %</b></div>
+        <div class="bar"><i id="sBar" style="width:0%"></i></div>
+      </div>
+      <p class="tip" id="weekTip"></p>
+      <a class="btn" href="#rituel">Commencer mon lavage guidé</a>
+    </div>
+
+    <div class="card">
+      <div class="row" style="justify-content:space-between">
+        <h3>Ta barre</h3>
+        <span class="muted" style="font-size:13px">estimation</span>
+      </div>
+      <div class="bar"><i id="soapBar" style="width:100%"></i></div>
+      <p class="muted" id="soapTxt" style="font-size:14px">Environ 24 lavages restants (2 mois à 3 lavages par semaine), si elle sèche bien entre deux usages.</p>
+    </div>
+
+    <div class="card shop" id="shopCard" style="display:none">
+      <h3 id="shopTitle">Ta barre arrive bientôt au bout</h3>
+      <p style="font-size:14px" id="shopTxt">Commande la suivante maintenant pour ne pas casser ton rituel : la livraison prend 5 à 7 jours ouvrés.</p>
+      <a class="btn shine" id="shopBtn" href="https://heannah.com/products/barre-lavante-coreenne-aux-12-plantes-fermentees?utm_source=coaching&amp;utm_medium=app&amp;utm_campaign=rachat">Commander ma prochaine barre</a>
+    </div>
+  </section>
+
+  <!-- DIAGNOSTIC -->
+  <section class="view stack" id="v-diagnostic">
+    <h1>Ton diagnostic</h1>
+    <p class="muted">Réponds selon tes cheveux aujourd'hui. Tu pourras refaire le diagnostic à tout moment.</p>
+    <form id="diagForm" class="stack" novalidate>
+      <fieldset class="q">
+        <legend>1. Tes racines regraissent…</legend>
+        <label class="opt"><input type="radio" name="racines" id="r-gras" value="gras">En 1 à 2 jours</label>
+        <label class="opt"><input type="radio" name="racines" id="r-normal" value="normal">En 3 jours ou plus</label>
+      </fieldset>
+      <fieldset class="q">
+        <legend>2. Ton cuir chevelu est-il sensible ?</legend>
+        <label class="opt"><input type="radio" name="sensible" id="s-oui" value="oui">Oui, il tiraille ou réagit facilement</label>
+        <label class="opt"><input type="radio" name="sensible" id="s-non" value="non">Non, pas particulièrement</label>
+      </fieldset>
+      <fieldset class="q">
+        <legend>3. Tes longueurs sont…</legend>
+        <label class="opt"><input type="radio" name="longueurs" id="l-seches" value="seches">Plutôt sèches</label>
+        <label class="opt"><input type="radio" name="longueurs" id="l-ok" value="ok">Normales</label>
+      </fieldset>
+      <fieldset class="q">
+        <legend>4. Tes cheveux sont…</legend>
+        <label class="opt"><input type="radio" name="taille" id="t-courts" value="courts">Courts</label>
+        <label class="opt"><input type="radio" name="taille" id="t-mi" value="mi">Mi-longs</label>
+        <label class="opt"><input type="radio" name="taille" id="t-longs" value="longs">Longs ou épais</label>
+      </fieldset>
+      <p id="diagErr" class="muted" style="display:none;color:#8A2E1F;font-weight:700">Réponds aux 4 questions pour voir ton résultat.</p>
+      <button class="btn" type="submit" id="diagBtn">Voir mon rituel personnalisé</button>
+    </form>
+    <div class="card result" id="diagResult" style="display:none"></div>
+  </section>
+
+  <!-- RITUEL GUIDÉ -->
+  <section class="view stack" id="v-rituel">
+    <div class="row" style="justify-content:space-between">
+      <h1 id="stepTitle">Mouille</h1>
+      <span class="chip" id="stepNum">1 / 4</span>
+    </div>
+    <div class="steps-dots" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+    <div id="stepBody" class="stack"></div>
+    <div class="row">
+      <button class="btn ghost" id="prevBtn" type="button">Retour</button>
+      <button class="btn" id="nextBtn" type="button">Suivant</button>
+    </div>
+  </section>
+
+  <!-- PROGRAMME -->
+  <section class="view stack" id="v-programme">
+    <h1>Ton programme</h1>
+    <p class="muted">Ton cuir chevelu a besoin de 4 à 8 semaines pour s'habituer à un lavage sans sulfates. Chaque lavage guidé terminé est compté ici.</p>
+    <div class="card">
+      <h3>Tes badges</h3>
+      <div class="badges" id="badges"></div>
+    </div>
+    <div class="stack" id="weeks" style="gap:10px"></div>
+    <button class="btn ghost" type="button" id="resetBtn">Recommencer le programme</button>
+  </section>
+
+  <!-- ASTUCES -->
+  <section class="view stack" id="v-astuces">
+    <h1>Astuces</h1>
+    <div class="card">
+      <div class="duo">
+        <img src="img/porte-savon.jpg" alt="Porte-savon égouttoir en bambou Heannah">
+        <div class="stack" style="gap:6px">
+          <h3>Faire durer ta barre 2 mois</h3>
+          <p style="font-size:14px">Toujours sur un porte-savon qui égoutte, hors du jet de la douche, à l'air libre après usage. Une barre qui reste dans l'eau fond deux fois plus vite.</p>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="duo">
+        <img src="img/sans-sulfates.jpg" alt="Femme sous la douche avec le savon Heannah">
+        <div class="stack" style="gap:6px">
+          <h3>Pourquoi ça mousse moins</h3>
+          <p style="font-size:14px">Sans sulfates, la mousse est plus légère, surtout au premier lavage. Ça ne veut pas dire que ça lave moins.</p>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Les 5 erreurs à éviter</h3>
+      <ol class="err">
+        <li>Frotter la barre sur les longueurs : ça emmêle et ça gaspille.</li>
+        <li>Zapper le massage : sans lui, la mousse n'atteint pas bien la racine.</li>
+        <li>Rincer trop vite : rince deux fois plus longtemps que tu n'as massé.</li>
+        <li>Laisser la barre dans l'eau : elle ramollit et fond.</li>
+        <li>Abandonner après 3 lavages : la transition prend quelques semaines.</li>
+      </ol>
+    </div>
+    <details><summary>Je peux l'utiliser tous les jours ?</summary><div>Tu peux, mais 2 à 3 fois par semaine suffit pour la plupart des cheveux et fait durer la barre plus longtemps.</div></details>
+    <details><summary>Et sur cheveux colorés ?</summary><div>La barre est sans sulfates. En cas de doute, fais d'abord un essai sur une petite mèche.</div></details>
+    <details><summary>Je pars en voyage</summary><div>Ta barre n'est pas un liquide : pas de limite des 100 ml en cabine. Laisse-la sécher au moins une heure avant de la ranger dans une boîte aérée.</div></details>
+    <details><summary>Mes cheveux sont ternes</summary><div>C'est souvent l'eau calcaire. Termine par un rinçage à l'eau fraîche, bien abondant.</div></details>
+    <details><summary>Ça ne me convient pas</summary><div>Tu as 30 jours pour être remboursé(e), même si la barre a été utilisée. Écris à contact@heannah.com.</div></details>
+    <p class="muted" style="font-size:14px">Une question ? Écris-nous à <a href="mailto:contact@heannah.com" style="color:var(--vert);font-weight:700">contact@heannah.com</a>.</p>
+  </section>
+</div>
+
+<div class="dialog" id="resetDlg" role="dialog" aria-modal="true" aria-labelledby="resetTitle">
+  <div class="card">
+    <h3 id="resetTitle">Recommencer le programme ?</h3>
+    <p class="muted">Tes lavages enregistrés et ton diagnostic seront effacés de ce téléphone.</p>
+    <div class="row">
+      <button class="btn ghost" type="button" id="resetNo">Annuler</button>
+      <button class="btn" type="button" id="resetYes">Recommencer</button>
+    </div>
+  </div>
+</div>
+
+<canvas id="confetti" aria-hidden="true"></canvas>
+<nav class="tabs" aria-label="Navigation">
+  <div class="in">
+    <a href="#accueil" data-v="accueil"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>Accueil</a>
+    <a href="#rituel" data-v="rituel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2M9 2h6"/></svg>Rituel</a>
+    <a href="#programme" data-v="programme"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4M8 15l2 2 4-4"/></svg>Programme</a>
+    <a href="#astuces" data-v="astuces"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A6 6 0 0 0 12 3z"/></svg>Astuces</a>
+  </div>
+</nav>
+
+<script>
+(function(){
+  var KEY="heannah-coach-v1";
+  var BAR_WASHES=24; // ~2 mois à 3 lavages / semaine
+  var state={profile:null,washes:[],start:null};
+  try{var s=JSON.parse(localStorage.getItem(KEY)||"null");if(s)state=Object.assign(state,s);}catch(e){}
+  function save(){try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){}}
+
+  var WEEKS=[
+    {t:"Premiers lavages",o:"Découvrir la barre et le massage de 2 minutes.",tip:"La mousse est plus légère qu'un shampoing : c'est normal sans sulfates."},
+    {t:"Tenir le cap",o:"Pas de retour au shampoing, même une fois.",tip:"Rince plus longtemps que d'habitude : c'est le geste qui fait la différence."},
+    {t:"Trouver ton rythme",o:"Ajuster ta fréquence de lavage.",tip:"Si tes racines restent fraîches, tu peux espacer un peu tes lavages."},
+    {t:"L'équilibre",o:"Observer comment tes racines tiennent entre deux lavages.",tip:"Le cuir chevelu commence à trouver son équilibre."},
+    {t:"Le bon dosage",o:"3 ou 4 passages de barre suffisent.",tip:"Coupe ta barre en deux : une moitié sèche pendant que tu utilises l'autre."},
+    {t:"Rituel installé",o:"Le massage devient un réflexe.",tip:"Essaie la brosse si tu masses encore aux doigts : la mousse va mieux à la racine."},
+    {t:"Vérifier ta barre",o:"Regarder l'usure de ta barre.",tip:"Une barre qui reste dans l'eau fond deux fois plus vite : vérifie ton porte-savon."},
+    {t:"Faire le point",o:"Comparer ton cuir chevelu à celui de la semaine 1.",tip:"Ta barre arrive en fin de vie : c'est le moment de préparer la suivante."}
+  ];
+
+  function target(){if(!state.profile)return 2;if(state.profile.sensible==="oui")return 2;return state.profile.racines==="gras"?3:2;}
+  function dayMs(){return 86400000;}
+  function weekIndex(d){if(!state.start)return 0;var diff=Math.floor((new Date(d)-new Date(state.start))/dayMs());return Math.max(0,Math.floor(diff/7));}
+  function currentWeek(){return Math.min(7,weekIndex(new Date()));}
+  function washesIn(w){return state.washes.filter(function(x){return weekIndex(x)===w;}).length;}
+  function phase(w){return w<1?"Démarrage":w<3?"Transition":w<4?"Équilibre":"Rituel installé";}
+
+  // ---------- ACCUEIL ----------
+  function renderHome(){
+    var w=currentWeek(),t=target();
+    document.getElementById("chipWeek").textContent="Semaine "+(w+1)+" / 8";
+    document.getElementById("phaseChip").textContent=phase(w);
+    document.getElementById("sWeek").textContent=washesIn(w)+" / "+t;
+    document.getElementById("sTotal").textContent=state.washes.length;
+    var pct=Math.min(100,Math.round(state.washes.length/(t*8)*100));
+    document.getElementById("sPct").textContent=pct+" %";
+    document.getElementById("sBar").style.width=pct+"%";
+    document.getElementById("weekTip").innerHTML="<b>Semaine "+(w+1)+" · "+WEEKS[w].t+".</b> "+WEEKS[w].tip;
+    var left=Math.max(0,BAR_WASHES-state.washes.length);
+    document.getElementById("soapBar").style.width=Math.round(left/BAR_WASHES*100)+"%";
+    document.getElementById("soapTxt").textContent=left>0?("Environ "+left+" lavages restants sur ta barre, si elle sèche bien entre deux usages."):"Ta barre arrive en fin de vie : pense à préparer la suivante.";
+    // Prochain lavage conseillé
+    var gap=t===3?2:3,nd=document.getElementById("nextDate");
+    if(!state.washes.length){nd.textContent="Aujourd'hui";}
+    else{
+      var last=new Date(state.washes[state.washes.length-1]);last.setHours(0,0,0,0);
+      var nx=new Date(last.getTime()+gap*dayMs()),today=new Date();today.setHours(0,0,0,0);
+      var dd=Math.round((nx-today)/dayMs());
+      nd.textContent=dd<=0?"Aujourd'hui":dd===1?"Demain":nx.toLocaleDateString("fr-FR",{weekday:"long",day:"numeric",month:"long"});
+    }
+    // Rachat : barre presque finie ou fin de programme
+    var sc=document.getElementById("shopCard");
+    if(left<=6||w>=6){sc.style.display="flex";
+      if(left===0){document.getElementById("shopTitle").textContent="C'est le moment de changer de barre";}
+    }else sc.style.display="none";
+    countUp(document.getElementById("sTotal"),state.washes.length,"");
+    var cd=document.getElementById("cardDiag");
+    if(state.profile){cd.querySelector("h3").textContent="Ton profil : "+profileName();cd.querySelector("p").textContent=t+" lavages par semaine, "+passes()+" passages de barre, massage "+(state.profile.sensible==="oui"?"doux":"complet")+".";cd.querySelector("a").textContent="Refaire mon diagnostic";cd.querySelector("a").className="btn ghost";}
+  }
+
+  var reduce=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function countUp(el,to,suffix){
+    var from=parseInt(el.getAttribute("data-v")||"0",10);el.setAttribute("data-v",to);
+    if(reduce||from===to){el.textContent=to+suffix;return;}
+    var t0=performance.now(),d=600;
+    (function f(n){var p=Math.min(1,(n-t0)/d);el.textContent=Math.round(from+(to-from)*(1-Math.pow(1-p,3)))+suffix;if(p<1)requestAnimationFrame(f);})(t0);
+  }
+  // Écran allumé pendant le massage, vibration au changement de zone (si le téléphone le permet)
+  var lock=null;
+  function wake(on){try{if(on&&navigator.wakeLock){navigator.wakeLock.request("screen").then(function(l){lock=l;}).catch(function(){});}else if(!on&&lock){lock.release();lock=null;}}catch(e){}}
+  function buzz(){try{if(navigator.vibrate)navigator.vibrate(80);}catch(e){}}
+  // Confettis à la fin d'un lavage
+  function confetti(){
+    if(reduce)return;var cv=document.getElementById("confetti"),ctx=cv.getContext("2d");
+    cv.width=innerWidth;cv.height=innerHeight;
+    var cols=["#34461F","#5C6E43","#A9B98A","#E3E8D6","#C9A86A"],ps=[];
+    for(var i=0;i<110;i++)ps.push({x:cv.width/2,y:cv.height*.45,vx:(Math.random()-.5)*12,vy:-Math.random()*13-4,r:Math.random()*6+3,c:cols[i%cols.length],a:Math.random()*6,s:(Math.random()-.5)*.3});
+    var t0=performance.now();
+    (function f(n){ctx.clearRect(0,0,cv.width,cv.height);
+      ps.forEach(function(p){p.vy+=.35;p.vx*=.99;p.x+=p.vx;p.y+=p.vy;p.a+=p.s;ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.a);ctx.fillStyle=p.c;ctx.fillRect(-p.r/2,-p.r/4,p.r,p.r/2);ctx.restore();});
+      if(n-t0<2600)requestAnimationFrame(f);else ctx.clearRect(0,0,cv.width,cv.height);})(t0);
+  }
+  // Précharge les images du rituel pour un passage d'étape instantané
+  ["etape1","etape2","massage","etape4","mousse"].forEach(function(n){var i=new Image();i.src="img/"+n+".jpg";});
+
+  // ---------- DIAGNOSTIC ----------
+  function passes(){return state.profile&&state.profile.racines==="gras"?4:3;}
+  function profileName(){
+    var p=state.profile;if(!p)return "";
+    if(p.sensible==="oui")return "cuir chevelu sensible";
+    if(p.racines==="gras")return "racines qui regraissent vite";
+    if(p.longueurs==="seches")return "longueurs sèches";
+    return "cheveux normaux";
+  }
+  function diagHTML(){
+    var p=state.profile,t=target(),li=[];
+    li.push("<li><b>"+t+" lavages par semaine.</b> "+(t===3?"Tes racines regraissent vite : 3 lavages gardent la sensation de légèreté.":"Le bon rythme pour laisser ton cuir chevelu trouver son équilibre.")+"</li>");
+    li.push("<li><b>"+passes()+" passages de barre</b> sur les racines : front, sommet, côtés, nuque.</li>");
+    li.push("<li><b>Massage "+(p.sensible==="oui"?"doux, du bout des doigts":"de 2 minutes, doigts ou brosse")+".</b>"+(p.sensible==="oui"?" Eau tiède plutôt que chaude, garde bien les 2 minutes mais appuie moins fort.":" 30 secondes par zone, de la nuque vers le sommet.")+"</li>");
+    if(p.longueurs==="seches")li.push("<li><b>Longueurs sèches :</b> barre sur les racines uniquement, après-shampoing ou quelques gouttes d'huile sur les pointes.</li>");
+    if(p.taille==="longs")li.push("<li><b>Cheveux longs :</b> fais mousser la barre entre tes mains et répartis la mousse sur les longueurs au rinçage.</li>");
+    return "<h2>Ton rituel : "+profileName()+"</h2><ul>"+li.join("")+"</ul><a class='btn' href='#rituel'>Commencer mon premier lavage guidé</a>";
+  }
+  function fillForm(){
+    if(!state.profile)return;var p=state.profile;
+    ["racines","sensible","longueurs","taille"].forEach(function(k){var el=document.querySelector("input[name="+k+"][value='"+p[k]+"']");if(el)el.checked=true;});
+    var r=document.getElementById("diagResult");r.innerHTML=diagHTML();r.style.display="flex";
+  }
+  document.getElementById("diagForm").addEventListener("submit",function(e){
+    e.preventDefault();var f=new FormData(e.target),p={};
+    var ok=["racines","sensible","longueurs","taille"].every(function(k){p[k]=f.get(k);return !!p[k];});
+    document.getElementById("diagErr").style.display=ok?"none":"block";
+    if(!ok)return;
+    state.profile=p;save();
+    var r=document.getElementById("diagResult");r.innerHTML=diagHTML();r.style.display="flex";
+    r.scrollIntoView({behavior:"smooth",block:"start"});renderHome();
+  });
+
+  // ---------- RITUEL GUIDÉ ----------
+  var step=0,zonesDone={},tool="doigts";
+  var ZONES=["Front","Sommet","Côtés","Nuque"];
+  var MZ=[{n:"Nuque",s:30},{n:"Côté gauche",s:30},{n:"Côté droit",s:30},{n:"Sommet",s:30}];
+  var timer={left:120,running:false,id:null};
+  var C=2*Math.PI*66;
+
+  function beep(){try{var a=new (window.AudioContext||window.webkitAudioContext)();var o=a.createOscillator(),g=a.createGain();o.frequency.value=660;g.gain.value=.08;o.connect(g);g.connect(a.destination);o.start();o.stop(a.currentTime+.18);}catch(e){}}
+
+  function stepHTML(i){
+    var longs=state.profile&&state.profile.taille==="longs";
+    if(i===0)return "<img class='stepimg' src='img/etape1.jpg' alt='Savon Heannah mouillé sous la douche'><p>Mouille bien tes cheveux et ta barre à l'eau tiède. Une barre bien mouillée mousse plus facilement.</p><div class='note'>Le saviez-vous ? En Corée, le lavage commence par la racine : on nettoie en douceur, puis on masse.</div>";
+    if(i===1){
+      var z=ZONES.map(function(n){return "<button type='button' class='zone' aria-pressed='"+(!!zonesDone[n])+"' data-z='"+n+"'><span class='ck'></span>"+n+"</button>";}).join("");
+      return "<img class='stepimg' src='img/etape2.jpg' alt='Application du savon Heannah sur les racines'><p>Frotte la barre <b>"+passes()+" fois</b> directement sur les racines. Touche chaque zone quand c'est fait :</p><div class='zones'>"+z+"</div>"+(longs?"<div class='note'><b>Cheveux longs :</b> uniquement les racines. Ne frotte jamais la barre sur les longueurs.</div>":"");
+    }
+    if(i===2){
+      var zl=MZ.map(function(z,k){return "<li data-k='"+k+"'><span>"+z.n+"</span><span>30 s</span></li>";}).join("");
+      var sens=state.profile&&state.profile.sensible==="oui";
+      return "<div class='toggle' role='group' aria-label='Outil de massage'><button type='button' data-tool='doigts' aria-pressed='"+(tool==="doigts")+"'>Avec les doigts</button><button type='button' data-tool='brosse' aria-pressed='"+(tool==="brosse")+"'>Avec la brosse</button></div>"+
+        "<img class='stepimg' id='mImg' src='img/"+(tool==="doigts"?"massage.jpg":"brosse.jpg")+"' alt='' style='"+(tool==="brosse"?"object-fit:contain;background:#fff":"")+"'>"+
+        "<p id='mTxt'>"+(tool==="doigts"?"Pulpe des doigts, jamais les ongles. Petits cercles lents, sans frotter les cheveux entre eux.":"Brosse à plat, picots contre le cuir chevelu. Mouvements circulaires légers : elle doit glisser, pas gratter.")+(sens?" <b>Cuir chevelu sensible : appuie moins fort, garde la durée.</b>":"")+"</p>"+
+        "<div class='card'><div class='timer'><div class='ring'><svg viewBox='0 0 150 150'><circle cx='75' cy='75' r='66' fill='none' stroke='var(--sauge)' stroke-width='10'/><circle id='rg' cx='75' cy='75' r='66' fill='none' stroke='var(--vert)' stroke-width='10' stroke-linecap='round' stroke-dasharray='"+C+"' stroke-dashoffset='0'/></svg><div class='t'><b id='tTime'>2:00</b><span id='tZone'>Prêt(e)</span></div></div><ul class='zlist' id='zl'>"+zl+"</ul></div>"+
+        "<button class='btn' type='button' id='tBtn'>Lancer le massage</button></div>";
+    }
+    return "<img class='stepimg' src='img/etape4.jpg' alt='Femme souriante après le rinçage'><p>Rince abondamment, deux fois plus longtemps que tu n'as massé."+(longs?" Profite du rinçage pour répartir la mousse sur tes longueurs.":"")+"</p><div class='duo'><img src='img/porte-savon.jpg' alt='Porte-savon en bambou'><p>Pose ta barre sur son porte-savon, <b>hors du jet d'eau</b>. C'est ce qui la fait durer 2 mois.</p></div>";
+  }
+  var TITLES=["Mouille","Applique","Masse","Rince et range"];
+  function renderStep(){
+    stopTimer();
+    document.getElementById("stepTitle").textContent=TITLES[step];
+    document.getElementById("stepNum").textContent=(step+1)+" / 4";
+    document.querySelectorAll(".steps-dots i").forEach(function(d,k){d.classList.toggle("on",k<=step);});
+    document.getElementById("stepBody").innerHTML=stepHTML(step);
+    document.getElementById("prevBtn").disabled=step===0;
+    var nb=document.getElementById("nextBtn");
+    nb.textContent=step===3?"J'ai terminé mon lavage":"Suivant";
+    nb.classList.toggle("shine",step===3);
+    if(step===2){timer.left=120;paintTimer();}
+  }
+  function paintTimer(){
+    var el=document.getElementById("tTime");if(!el)return;
+    var m=Math.floor(timer.left/60),s=timer.left%60;el.textContent=m+":"+(s<10?"0":"")+s;
+    document.getElementById("rg").setAttribute("stroke-dashoffset",String(C*(1-timer.left/120)));
+    var elapsed=120-timer.left,k=Math.min(3,Math.floor(elapsed/30));
+    var rgw=document.querySelector(".ring");if(rgw)rgw.classList.toggle("run",timer.running);
+    document.querySelectorAll("#zl li").forEach(function(li,i){li.classList.toggle("now",timer.running&&i===k);li.classList.toggle("done",i<k||timer.left===0);});
+    document.getElementById("tZone").textContent=timer.left===0?"Terminé":(timer.running?MZ[k].n:(elapsed>0?"En pause":"Prêt(e)"));
+    var b=document.getElementById("tBtn");
+    b.textContent=timer.left===0?"Massage terminé, recommencer":(timer.running?"Pause":(elapsed>0?"Reprendre":"Lancer le massage"));
+  }
+  function stopTimer(){if(timer.id){clearInterval(timer.id);timer.id=null;}timer.running=false;wake(false);}
+  function toggleTimer(){
+    if(timer.left===0){timer.left=120;}
+    if(timer.running){stopTimer();paintTimer();return;}
+    timer.running=true;beep();wake(true);
+    timer.id=setInterval(function(){
+      timer.left--;
+      if(timer.left%30===0){beep();buzz();}
+      if(timer.left<=0){timer.left=0;stopTimer();var nb=document.getElementById("nextBtn");if(nb)nb.classList.add("shine");}
+      paintTimer();
+    },1000);
+    paintTimer();
+  }
+  document.getElementById("stepBody").addEventListener("click",function(e){
+    var z=e.target.closest(".zone");
+    if(z){var n=z.getAttribute("data-z");zonesDone[n]=!zonesDone[n];z.setAttribute("aria-pressed",String(!!zonesDone[n]));return;}
+    var tb=e.target.closest("[data-tool]");
+    if(tb){tool=tb.getAttribute("data-tool");var keep=timer.left,run=timer.running;stopTimer();document.getElementById("stepBody").innerHTML=stepHTML(2);timer.left=keep;paintTimer();if(run)toggleTimer();return;}
+    if(e.target.closest("#tBtn"))toggleTimer();
+  });
+  document.getElementById("prevBtn").addEventListener("click",function(){if(step>0){step--;renderStep();}});
+  document.getElementById("nextBtn").addEventListener("click",function(){
+    if(step<3){step++;renderStep();window.scrollTo(0,0);return;}
+    finishWash();
+  });
+  function finishWash(){
+    var now=new Date().toISOString();
+    if(!state.start){var d=new Date();d.setHours(0,0,0,0);state.start=d.toISOString();}
+    state.washes.push(now);save();
+    var w=currentWeek(),t=target(),n=washesIn(w);
+    document.getElementById("stepTitle").textContent="Bravo !";
+    document.getElementById("stepNum").textContent="Lavage n°"+state.washes.length;
+    document.getElementById("stepBody").innerHTML="<div class='card done-screen'><img class='stepimg' src='img/mousse.jpg' alt='Savon Heannah dans des mains pleines de mousse'><div class='big'>"+n+" / "+t+"</div><p><b>lavages guidés cette semaine</b> (semaine "+(w+1)+" sur 8)</p><p class='muted'>"+(n>=t?"Objectif de la semaine atteint. Laisse ton cuir chevelu respirer jusqu'au prochain lavage.":"Encore "+(t-n)+" lavage"+(t-n>1?"s":"")+" pour atteindre l'objectif de la semaine.")+"</p><a class='btn' href='#programme'>Voir mon programme</a><button type='button' class='link' id='undoBtn'>Annuler ce lavage (enregistré par erreur)</button></div>";
+    document.getElementById("prevBtn").parentNode.style.display="none";
+    document.getElementById("undoBtn").addEventListener("click",function(){
+      state.washes.pop();if(!state.washes.length)state.start=null;save();location.hash="#accueil";
+    });
+    confetti();buzz();
+    renderHome();
+  }
+
+  // ---------- PROGRAMME ----------
+  function renderProgram(){
+    var w=currentWeek(),t=target(),html="";
+    WEEKS.forEach(function(wk,i){
+      var n=washesIn(i),cls=(i<w||(i===w&&n>=t))?"done":(i===w?"now":"later");
+      if(i<w&&n<t)cls="";
+      html+="<div class='week "+cls+"'><div class='n'>"+(cls==="done"?"✓":(i+1))+"</div><div><h3>"+wk.t+"</h3><p>"+wk.o+"</p>"+(i===w?"<p class='tip'>"+wk.tip+"</p>":"")+"</div><div class='count'>"+(i<=w?n+" / "+t:"")+"</div></div>";
+    });
+    document.getElementById("weeks").innerHTML=html;
+    var full=WEEKS.filter(function(_,i){return washesIn(i)>=t;}).length;
+    var B=[
+      {k:"1",n:"1er lavage",on:state.washes.length>=1},
+      {k:"S1",n:"1re semaine réussie",on:full>=1},
+      {k:"4",n:"Mi-parcours",on:w>=3&&state.washes.length>=t*3},
+      {k:"8",n:"Rituel maîtrisé",on:w>=7&&state.washes.length>=t*6}
+    ];
+    document.getElementById("badges").innerHTML=B.map(function(b){return "<div class='badge"+(b.on?" on":"")+"'><div class='b'>"+b.k+"</div>"+b.n+"</div>";}).join("");
+  }
+  var dlg=document.getElementById("resetDlg");
+  document.getElementById("resetBtn").addEventListener("click",function(){dlg.classList.add("on");document.getElementById("resetNo").focus();});
+  document.getElementById("resetNo").addEventListener("click",function(){dlg.classList.remove("on");});
+  document.getElementById("resetYes").addEventListener("click",function(){state={profile:null,washes:[],start:null};save();dlg.classList.remove("on");location.reload();});
+
+  // ---------- ROUTAGE ----------
+  var VIEWS=["accueil","diagnostic","rituel","programme","astuces"];
+  function route(){
+    var v=(location.hash||"#accueil").slice(1);if(VIEWS.indexOf(v)<0)v="accueil";
+    VIEWS.forEach(function(x){document.getElementById("v-"+x).classList.toggle("on",x===v);});
+    document.querySelectorAll("nav.tabs a").forEach(function(a){a.classList.toggle("on",a.getAttribute("data-v")===v||(v==="diagnostic"&&a.getAttribute("data-v")==="accueil"));});
+    if(v==="rituel"){step=0;zonesDone={};document.getElementById("prevBtn").parentNode.style.display="flex";renderStep();}
+    else stopTimer();
+    if(v==="programme")renderProgram();
+    if(v==="diagnostic")fillForm();
+    renderHome();window.scrollTo(0,0);
+  }
+  window.addEventListener("hashchange",route);
+  route();
+})();
+</script>
+</body>
+</html>
