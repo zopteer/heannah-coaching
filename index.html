@@ -55,6 +55,10 @@ h2{font-size:22px;line-height:1.25}
 h3{font-size:17px}
 p{margin:0}
 .muted{color:var(--gris)}
+/* Touche coréenne : petit mot en hangeul au-dessus des titres */
+.ko{display:block;font-family:var(--display);font-size:13px;font-weight:700;letter-spacing:.06em;color:var(--vert-doux);margin-bottom:3px}
+h1 .ko{font-size:14px;margin-bottom:4px}
+.card > .ko{margin-bottom:-10px}
 .stack{display:flex;flex-direction:column;gap:16px}
 .card{background:var(--carte);border:1px solid rgba(214,220,201,.7);border-radius:20px;padding:18px;display:flex;flex-direction:column;gap:12px;box-shadow:0 1px 2px rgba(31,39,22,.04),0 12px 32px -18px rgba(31,39,22,.28)}
 .btn{position:relative;overflow:hidden;isolation:isolate;display:flex;align-items:center;justify-content:center;gap:8px;width:100%;border:0;border-radius:14px;padding:15px 18px;font-weight:800;background:linear-gradient(180deg,#42582A,var(--vert));color:#fff;text-decoration:none;font-size:16px;box-shadow:0 8px 20px -10px rgba(52,70,31,.7),inset 0 1px 0 rgba(255,255,255,.14)}
@@ -313,6 +317,7 @@ header.top{padding-top:max(16px,env(safe-area-inset-top));padding-left:max(16px,
     </a>
 
     <div class="card" id="cardDiag">
+      <span class="ko" aria-hidden="true">진단</span>
       <h3>Étape 1 : ton diagnostic</h3>
       <p class="muted">4 questions, 1 minute. On adapte ta fréquence de lavage et ton massage à tes cheveux.</p>
       <a class="btn" href="#diagnostic">Faire mon diagnostic</a>
@@ -320,7 +325,7 @@ header.top{padding-top:max(16px,env(safe-area-inset-top));padding-left:max(16px,
 
     <div class="card">
       <div class="row" style="justify-content:space-between">
-        <h3>Cette semaine</h3>
+        <h3><span class="ko" aria-hidden="true">이번 주</span>Cette semaine</h3>
         <span class="chip" id="phaseChip">Démarrage</span>
       </div>
       <div class="stats">
@@ -337,7 +342,7 @@ header.top{padding-top:max(16px,env(safe-area-inset-top));padding-left:max(16px,
 
     <div class="card">
       <div class="row" style="justify-content:space-between">
-        <h3>Ta barre</h3>
+        <h3><span class="ko" aria-hidden="true">비누</span>Ta barre</h3>
         <span class="muted" style="font-size:13px">estimation</span>
       </div>
       <div class="bar"><i id="soapBar" style="width:100%"></i></div>
@@ -353,7 +358,7 @@ header.top{padding-top:max(16px,env(safe-area-inset-top));padding-left:max(16px,
 
   <!-- DIAGNOSTIC -->
   <section class="view stack" id="v-diagnostic">
-    <h1>Ton diagnostic</h1>
+    <h1><span class="ko" aria-hidden="true">진단</span>Ton diagnostic</h1>
     <p class="muted">Réponds selon tes cheveux aujourd'hui. Tu pourras refaire le diagnostic à tout moment.</p>
     <div class="diagprog">
       <div class="row" style="justify-content:space-between;font-size:13px"><span class="muted">Ta progression</span><b id="diagCount" style="color:var(--vert)">0 / 4</b></div>
@@ -390,7 +395,7 @@ header.top{padding-top:max(16px,env(safe-area-inset-top));padding-left:max(16px,
   <!-- RITUEL GUIDÉ -->
   <section class="view stack" id="v-rituel">
     <div class="row" style="justify-content:space-between">
-      <h1 id="stepTitle">Mouille</h1>
+      <div><span class="ko" id="stepKo" aria-hidden="true">적시기</span><h1 id="stepTitle">Mouille</h1></div>
       <span class="chip" id="stepNum">1 / 4</span>
     </div>
     <div class="steps-dots" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
@@ -403,10 +408,10 @@ header.top{padding-top:max(16px,env(safe-area-inset-top));padding-left:max(16px,
 
   <!-- PROGRAMME -->
   <section class="view stack" id="v-programme">
-    <h1>Ton programme</h1>
+    <h1><span class="ko" aria-hidden="true">8주 프로그램</span>Ton programme</h1>
     <p class="muted">Ton cuir chevelu a besoin de 4 à 8 semaines pour s'habituer à un lavage sans sulfates. Chaque lavage guidé terminé est compté ici.</p>
     <div class="card">
-      <h3>Tes badges</h3>
+      <h3><span class="ko" aria-hidden="true">배지</span>Tes badges</h3>
       <div class="badges" id="badges"></div>
     </div>
     <div class="stack" id="weeks" style="gap:10px"></div>
@@ -415,7 +420,7 @@ header.top{padding-top:max(16px,env(safe-area-inset-top));padding-left:max(16px,
 
   <!-- ASTUCES -->
   <section class="view stack" id="v-astuces">
-    <h1>Astuces</h1>
+    <h1><span class="ko" aria-hidden="true">팁</span>Astuces</h1>
     <div class="card">
       <div class="duo">
         <img src="img/porte-savon.webp" alt="Porte-savon égouttoir en bambou Heannah">
@@ -652,7 +657,7 @@ header.top{padding-top:max(16px,env(safe-area-inset-top));padding-left:max(16px,
   }
   function paintStep(animTitle){
     stopTimer();
-    var ti=document.getElementById("stepTitle");ti.textContent=TITLES[step];
+    var ti=document.getElementById("stepTitle");ti.textContent=TITLES[step];document.getElementById("stepKo").textContent=["적시기","바르기","마사지","헹구기"][step];
     if(animTitle)anim(ti,[{opacity:0,transform:"translateY(10px)"},{opacity:1,transform:"none"}],450);
     document.getElementById("stepNum").textContent=(step+1)+" / 4";
     document.querySelectorAll(".steps-dots i").forEach(function(d,k){d.classList.toggle("on",k<=step);d.classList.toggle("cur",k===step);});
@@ -738,7 +743,7 @@ header.top{padding-top:max(16px,env(safe-area-inset-top));padding-left:max(16px,
     state.washes.push(now);save();
     var w=currentWeek(),t=target(),n=washesIn(w);
     var sb=document.getElementById("stepBody");sb.style.setProperty("--sx","0px");sb.style.setProperty("--sy","24px");
-    var ti=document.getElementById("stepTitle");ti.textContent="Bravo !";
+    var ti=document.getElementById("stepTitle");ti.textContent="Bravo !";document.getElementById("stepKo").textContent="잘했어요";
     anim(ti,[{opacity:0,transform:"scale(.8)"},{opacity:1,transform:"scale(1.06)"},{transform:"none"}],600);
     document.getElementById("stepNum").textContent="Lavage n°"+state.washes.length;
     document.getElementById("stepBody").innerHTML="<div class='card done-screen'><img class='stepimg' src='img/mousse.jpg' alt='Savon Heannah dans des mains pleines de mousse'><div class='big'>"+n+" / "+t+"</div><p><b>lavages guidés cette semaine</b> (semaine "+(w+1)+" sur 8)</p><p class='muted'>"+(n>=t?"Objectif de la semaine atteint. Laisse ton cuir chevelu respirer jusqu'au prochain lavage.":"Encore "+(t-n)+" lavage"+(t-n>1?"s":"")+" pour atteindre l'objectif de la semaine.")+"</p><a class='btn' href='#programme'>Voir mon programme</a><button type='button' class='link' id='undoBtn'>Annuler ce lavage (enregistré par erreur)</button></div>";
