@@ -226,6 +226,25 @@ ol.err li{margin-bottom:6px}
 .result li:nth-child(3){animation-delay:.16s}
 .result li:nth-child(n+4){animation-delay:.24s}
 
+.head{width:100%;height:auto;display:block;border-radius:16px;background:linear-gradient(160deg,#F7F9F1,#E4EAD5);box-shadow:0 18px 36px -22px rgba(31,39,22,.6)}
+.head .hz .glow{opacity:0;transition:opacity .5s;transform-box:fill-box;transform-origin:center}
+.head .hz.now .glow{opacity:1;animation:hglow 1.8s ease-in-out infinite}
+.head .hz .dot{fill:rgba(255,255,255,.22);stroke:rgba(255,255,255,.75);stroke-width:1.5;transition:fill .4s,stroke .4s}
+.head .hz.done .dot{fill:#6E9A3C;stroke:#fff}
+.head .hz .ck2{opacity:0;transition:opacity .3s}
+.head .hz.done .ck2{opacity:1}
+.head .hl{font:700 12px var(--body);fill:var(--gris);transition:fill .3s}
+.head .hl.now{fill:var(--vert);font-weight:800}
+.head .tool{transition:transform .8s cubic-bezier(.34,1.3,.64,1),opacity .4s}
+.head.fin .tool{opacity:0}
+.head .orb,.head .tl{animation:orbit 1.3s linear infinite;animation-play-state:paused}
+.head .tl{animation-direction:reverse}
+.head .swirl{animation:orbit 7s linear infinite;animation-play-state:paused;opacity:.5;transition:opacity .4s}
+.head.run .orb,.head.run .tl,.head.run .swirl{animation-play-state:running}
+.head.run .swirl{opacity:1}
+@keyframes orbit{to{transform:rotate(360deg)}}
+@keyframes hglow{0%,100%{transform:scale(.85)}50%{transform:scale(1.12)}}
+
 /* Programme */
 .week.done .n{animation:pop .45s both}
 .week.now{animation:glow 2.6s ease-in-out infinite}
@@ -632,7 +651,7 @@ header.top{padding-top:max(16px,env(safe-area-inset-top));padding-left:max(16px,
       var zl=MZ.map(function(z,k){return "<li data-k='"+k+"'><span>"+z.n+"</span><span>30 s</span></li>";}).join("");
       var sens=state.profile&&state.profile.sensible==="oui";
       return "<div class='toggle' role='group' aria-label='Outil de massage'><button type='button' data-tool='doigts' aria-pressed='"+(tool==="doigts")+"'>Avec les doigts</button><button type='button' data-tool='brosse' aria-pressed='"+(tool==="brosse")+"'>Avec la brosse</button></div>"+
-        "<img class='stepimg' id='mImg' src='img/"+(tool==="doigts"?"massage.jpg":"brosse.jpg")+"' alt='' style='"+(tool==="brosse"?"object-fit:contain;background:#fff":"")+"'>"+
+        headSVG()+
         "<p id='mTxt'>"+(tool==="doigts"?"Pulpe des doigts, jamais les ongles. Petits cercles lents, sans frotter les cheveux entre eux.":"Brosse à plat, picots contre le cuir chevelu. Mouvements circulaires légers : elle doit glisser, pas gratter.")+(sens?" <b>Cuir chevelu sensible : appuie moins fort, garde la durée.</b>":"")+"</p>"+
         "<div class='card'><div class='timer'><div class='ring'><svg viewBox='0 0 150 150'><circle cx='75' cy='75' r='66' fill='none' stroke='var(--sauge)' stroke-width='10'/><circle id='rg' cx='75' cy='75' r='66' fill='none' stroke='var(--vert)' stroke-width='10' stroke-linecap='round' stroke-dasharray='"+C+"' stroke-dashoffset='0'/></svg><div class='t'><b id='tTime'>2:00</b><span id='tZone'>Prêt(e)</span></div></div><ul class='zlist' id='zl'>"+zl+"</ul></div>"+
         "<button class='btn' type='button' id='tBtn'>Lancer le massage</button></div>";
@@ -663,6 +682,37 @@ header.top{padding-top:max(16px,env(safe-area-inset-top));padding-left:max(16px,
     nb.classList.toggle("shine",step===3);
     if(step===2){timer.left=120;paintTimer();}
   }
+  // Illustration : tête vue de dos, la zone en cours s'allume et l'outil y tourne en petits cercles
+  var HZ=[[160,184],[100,120],[220,120],[160,58]]; // Nuque, côté gauche, côté droit, sommet (vue de dos : la gauche de la personne est à gauche)
+  var HL=[[160,258],[28,126],[292,126],[160,22]];
+  function headSVG(){
+    var zones=HZ.map(function(z){return "<g class='hz' style='transform:translate("+z[0]+"px,"+z[1]+"px)'><circle class='glow' r='34' fill='url(#hg)'/><circle class='dot' r='9'/><path class='ck2' d='M-4 0l3 3 5-6' fill='none' stroke='#fff' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/></g>";}).join("");
+    var labels=HL.map(function(l,i){return "<text class='hl' x='"+l[0]+"' y='"+l[1]+"' text-anchor='middle'>"+MZ[i].n+"</text>";}).join("");
+    var fingers="<g fill='#EBCBA9' stroke='#B98B62' stroke-width='1.5'><ellipse cx='-13' cy='3' rx='5.5' ry='8'/><ellipse cx='-4.5' cy='-2' rx='5.5' ry='9'/><ellipse cx='4.5' cy='-2' rx='5.5' ry='9'/><ellipse cx='13' cy='3' rx='5.5' ry='8'/></g>";
+    var picots="";for(var r=-1;r<=1;r++)for(var c=-2;c<=2;c++)picots+="<circle cx='"+(c*6+(r===0?3:0))+"' cy='"+(r*6)+"' r='1.9'/>";
+    var brush="<g><rect x='-18' y='-14' width='36' height='28' rx='13' fill='#EDE3CF' stroke='#BFAF8C' stroke-width='1.5'/><g fill='#C7B58C'>"+picots+"</g></g>";
+    return "<svg class='head' id='head' viewBox='-16 0 352 270' role='img' aria-label='Zone à masser'>"+
+      "<defs><radialGradient id='hg'><stop offset='0' stop-color='#DDF0A6' stop-opacity='.95'/><stop offset='1' stop-color='#DDF0A6' stop-opacity='0'/></radialGradient></defs>"+
+      "<circle cx='160' cy='132' r='122' fill='#fff' opacity='.55'/>"+
+      "<path d='M38 270C48 230 100 216 160 216s112 14 122 54z' fill='#C5CFAF'/>"+
+      "<rect x='134' y='176' width='52' height='52' rx='18' fill='#E3BF9C'/>"+
+      "<ellipse cx='83' cy='130' rx='12' ry='20' fill='#E3BF9C'/><ellipse cx='237' cy='130' rx='12' ry='20' fill='#E3BF9C'/>"+
+      "<path d='M160 36c54 0 84 42 84 92 0 42-24 74-84 78-60-4-84-36-84-78 0-50 30-92 84-92z' fill='#5B4636'/>"+
+      "<g fill='none' stroke='#71594A' stroke-width='2' stroke-linecap='round' opacity='.8'><path d='M160 44c-6 50-6 110 0 156'/><path d='M136 50c-22 40-26 96-14 140'/><path d='M184 50c22 40 26 96 14 140'/><path d='M112 66c-20 32-24 76-14 112'/><path d='M208 66c20 32 24 76 14 112'/></g>"+
+      zones+labels+
+      "<g class='tool' style='transform:translate("+HZ[0][0]+"px,"+HZ[0][1]+"px)'><circle class='swirl' r='24' fill='none' stroke='#fff' stroke-width='2' stroke-dasharray='4 7' stroke-linecap='round'/>"+
+      "<g class='orb'><g transform='translate(8 0)'><g class='tl'>"+(tool==="doigts"?fingers:brush)+"</g></g></g></g>"+
+      "</svg>";
+  }
+  function paintHead(k){
+    var hd=document.getElementById("head");if(!hd)return;
+    var fin=timer.left===0,started=timer.left<120;
+    hd.classList.toggle("run",timer.running);hd.classList.toggle("fin",fin);
+    hd.querySelectorAll(".hz").forEach(function(z,i){z.classList.toggle("now",!fin&&i===k);z.classList.toggle("done",fin||(started&&i<k));});
+    hd.querySelectorAll(".hl").forEach(function(l,i){l.classList.toggle("now",!fin&&i===k);});
+    hd.querySelector(".tool").style.transform="translate("+HZ[k][0]+"px,"+HZ[k][1]+"px)";
+    hd.setAttribute("aria-label",fin?"Massage terminé sur les 4 zones":"Zone à masser : "+MZ[k].n);
+  }
   function paintTimer(){
     var el=document.getElementById("tTime");if(!el)return;
     var m=Math.floor(timer.left/60),s=timer.left%60;el.textContent=m+":"+(s<10?"0":"")+s;
@@ -670,6 +720,7 @@ header.top{padding-top:max(16px,env(safe-area-inset-top));padding-left:max(16px,
     var elapsed=120-timer.left,k=Math.min(3,Math.floor(elapsed/30));
     var rgw=document.querySelector(".ring");if(rgw)rgw.classList.toggle("run",timer.running);
     document.querySelectorAll("#zl li").forEach(function(li,i){li.classList.toggle("now",timer.running&&i===k);li.classList.toggle("done",i<k||timer.left===0);});
+    paintHead(k);
     document.getElementById("tZone").textContent=timer.left===0?"Terminé":(timer.running?MZ[k].n:(elapsed>0?"En pause":"Prêt(e)"));
     var b=document.getElementById("tBtn");
     b.textContent=timer.left===0?"Massage terminé, recommencer":(timer.running?"Pause":(elapsed>0?"Reprendre":"Lancer le massage"));
