@@ -576,7 +576,7 @@ header.top{padding-top:max(16px,env(safe-area-inset-top));padding-left:max(16px,
     var p=state.profile,t=target(),li=[];
     li.push("<li><b>"+t+" lavages par semaine.</b> "+(t===3?"Tes racines regraissent vite : 3 lavages gardent la sensation de légèreté.":"Le bon rythme pour laisser ton cuir chevelu trouver son équilibre.")+"</li>");
     li.push("<li><b>"+passes()+" passages de barre</b> sur les racines : front, sommet, côtés, nuque.</li>");
-    li.push("<li><b>Massage "+(p.sensible==="oui"?"doux, du bout des doigts":"de 2 minutes, doigts ou brosse")+".</b>"+(p.sensible==="oui"?" Eau tiède plutôt que chaude, garde bien les 2 minutes mais appuie moins fort.":" 30 secondes par zone, de la nuque vers le sommet.")+"</li>");
+    li.push("<li><b>Massage "+(p.sensible==="oui"?"doux, du bout des doigts":"de 2 minutes, doigts ou brosse")+".</b>"+(p.sensible==="oui"?" Eau tiède plutôt que chaude, garde bien les 2 minutes mais appuie moins fort.":" 2 tours de 15 secondes par zone, de la nuque vers le sommet.")+"</li>");
     if(p.longueurs==="seches")li.push("<li><b>Longueurs sèches :</b> barre sur les racines uniquement, après-shampoing ou quelques gouttes d'huile sur les pointes.</li>");
     if(p.taille==="longs")li.push("<li><b>Cheveux longs :</b> fais mousser la barre entre tes mains et répartis la mousse sur les longueurs au rinçage.</li>");
     return "<h2>Ton rituel : "+profileName()+"</h2><ul>"+li.join("")+"</ul><a class='btn' href='#rituel'>Commencer mon premier lavage guidé</a>";
@@ -620,7 +620,8 @@ header.top{padding-top:max(16px,env(safe-area-inset-top));padding-left:max(16px,
   // ---------- RITUEL GUIDÉ ----------
   var step=0,zonesDone={},tool="doigts";
   var ZONES=["Front","Sommet","Côtés","Nuque"];
-  var MZ=[{n:"Nuque",s:30},{n:"Côté gauche",s:30},{n:"Côté droit",s:30},{n:"Sommet",s:30}];
+  var MZ=[{n:"Nuque"},{n:"Côté gauche"},{n:"Côté droit"},{n:"Sommet"}];
+  var SEG=15; // 2 tours de 4 zones × 15 s = 2 minutes
   var timer={left:120,running:false,id:null};
   var C=2*Math.PI*66;
 
@@ -634,7 +635,7 @@ header.top{padding-top:max(16px,env(safe-area-inset-top));padding-left:max(16px,
       return "<img class='stepimg' src='img/etape2.jpg' alt='Application du savon Heannah sur les racines'><p>Frotte la barre <b>"+passes()+" fois</b> directement sur les racines. Touche chaque zone quand c'est fait :</p><div class='zones'>"+z+"</div>"+(longs?"<div class='note'><b>Cheveux longs :</b> uniquement les racines. Ne frotte jamais la barre sur les longueurs.</div>":"");
     }
     if(i===2){
-      var zl=MZ.map(function(z,k){return "<li data-k='"+k+"'><span>"+z.n+"</span><span>30 s</span></li>";}).join("");
+      var zl=MZ.map(function(z,k){return "<li data-k='"+k+"'><span>"+z.n+"</span><span>2 × 15 s</span></li>";}).join("");
       var sens=state.profile&&state.profile.sensible==="oui";
       return "<div class='toggle' role='group' aria-label='Outil de massage'><button type='button' data-tool='doigts' aria-pressed='"+(tool==="doigts")+"'>Avec les doigts</button><button type='button' data-tool='brosse' aria-pressed='"+(tool==="brosse")+"'>Avec la brosse</button></div>"+
         headSVG()+
@@ -690,11 +691,11 @@ header.top{padding-top:max(16px,env(safe-area-inset-top));padding-left:max(16px,
         :"<g class='orb'><circle class='trail' r='15' transform='rotate(-115)'/><g transform='translate(12 0)'><g class='tl'>"+brush+"</g></g></g>")+"</g>"+
       "</svg>";
   }
-  function paintHead(k){
+  function paintHead(k,seg){
     var hd=document.getElementById("head");if(!hd)return;
     var fin=timer.left===0,started=timer.left<120;
     hd.classList.toggle("run",timer.running);hd.classList.toggle("fin",fin);
-    hd.querySelectorAll(".hz").forEach(function(z,i){z.classList.toggle("now",!fin&&i===k);z.classList.toggle("done",fin||(started&&i<k));});
+    hd.querySelectorAll(".hz").forEach(function(z,i){z.classList.toggle("now",!fin&&i===k);z.classList.toggle("done",fin||(started&&seg>=5+i));});
     hd.querySelectorAll(".hl").forEach(function(l,i){l.classList.toggle("now",!fin&&i===k);});
     hd.querySelector(".tool").style.transform="translate("+HZ[k][0]+"px,"+HZ[k][1]+"px)";
     hd.setAttribute("aria-label",fin?"Massage terminé sur les 4 zones":"Zone à masser : "+MZ[k].n);
@@ -703,11 +704,11 @@ header.top{padding-top:max(16px,env(safe-area-inset-top));padding-left:max(16px,
     var el=document.getElementById("tTime");if(!el)return;
     var m=Math.floor(timer.left/60),s=timer.left%60;el.textContent=m+":"+(s<10?"0":"")+s;
     document.getElementById("rg").setAttribute("stroke-dashoffset",String(C*(1-timer.left/120)));
-    var elapsed=120-timer.left,k=Math.min(3,Math.floor(elapsed/30));
+    var elapsed=120-timer.left,seg=Math.min(7,Math.floor(elapsed/SEG)),k=seg%4,tour=seg<4?1:2;
     var rgw=document.querySelector(".ring");if(rgw)rgw.classList.toggle("run",timer.running);
-    document.querySelectorAll("#zl li").forEach(function(li,i){li.classList.toggle("now",timer.running&&i===k);li.classList.toggle("done",i<k||timer.left===0);});
-    paintHead(k);
-    document.getElementById("tZone").textContent=timer.left===0?"Terminé":(timer.running?MZ[k].n:(elapsed>0?"En pause":"Prêt(e)"));
+    document.querySelectorAll("#zl li").forEach(function(li,i){li.classList.toggle("now",timer.running&&i===k);li.classList.toggle("done",seg>=5+i||timer.left===0);});
+    paintHead(k,seg);
+    document.getElementById("tZone").textContent=timer.left===0?"Terminé":(timer.running?MZ[k].n+" · "+tour+"/2":(elapsed>0?"En pause":"Prêt(e)"));
     var b=document.getElementById("tBtn");
     b.textContent=timer.left===0?"Massage terminé, recommencer":(timer.running?"Pause":(elapsed>0?"Reprendre":"Lancer le massage"));
   }
@@ -718,7 +719,7 @@ header.top{padding-top:max(16px,env(safe-area-inset-top));padding-left:max(16px,
     timer.running=true;beep();wake(true);
     timer.id=setInterval(function(){
       timer.left--;
-      if(timer.left%30===0){beep();buzz();}
+      if(timer.left%SEG===0){beep();buzz();}
       if(timer.left<=0){timer.left=0;stopTimer();var nb=document.getElementById("nextBtn");if(nb)nb.classList.add("shine");}
       paintTimer();
     },1000);
