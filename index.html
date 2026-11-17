@@ -143,7 +143,7 @@ details[open]:not(.closing) summary::after{transform:rotate(135deg);background:v
 details > div{padding:0 0 15px;color:var(--encre);overflow:hidden}
 .duo{display:grid;grid-template-columns:110px 1fr;gap:14px;align-items:center}
 .duo img{border-radius:12px;aspect-ratio:1;object-fit:cover}
-.duo img[src$="porte-savon.jpg"]{object-fit:contain;background:#fff;padding:4px}
+.duo img[src$="porte-savon.webp"]{object-fit:contain;background:none;border-radius:0;filter:drop-shadow(0 8px 10px rgba(31,39,22,.12))}
 ol.err{margin:0;padding-left:20px}
 ol.err li{margin-bottom:6px}
 .done-screen{text-align:center;align-items:center}
@@ -441,7 +441,7 @@ header.top{padding-top:max(16px,env(safe-area-inset-top));padding-left:max(16px,
     <h1>Astuces</h1>
     <div class="card">
       <div class="duo">
-        <img src="img/porte-savon.jpg" alt="Porte-savon égouttoir en bambou Heannah">
+        <img src="img/porte-savon.webp" alt="Porte-savon égouttoir en bambou Heannah">
         <div class="stack" style="gap:6px">
           <h3>Faire durer ta barre 2 mois</h3>
           <p style="font-size:14px">Toujours sur un porte-savon qui égoutte, hors du jet de la douche, à l'air libre après usage. Une barre qui reste dans l'eau fond deux fois plus vite.</p>
@@ -660,7 +660,7 @@ header.top{padding-top:max(16px,env(safe-area-inset-top));padding-left:max(16px,
         "<div class='card'><div class='timer'><div class='ring'><svg viewBox='0 0 150 150'><circle cx='75' cy='75' r='66' fill='none' stroke='var(--sauge)' stroke-width='10'/><circle id='rg' cx='75' cy='75' r='66' fill='none' stroke='var(--vert)' stroke-width='10' stroke-linecap='round' stroke-dasharray='"+C+"' stroke-dashoffset='0'/></svg><div class='t'><b id='tTime'>2:00</b><span id='tZone'>Prêt(e)</span></div></div><ul class='zlist' id='zl'>"+zl+"</ul></div>"+
         "<button class='btn' type='button' id='tBtn'>Lancer le massage</button></div>";
     }
-    return "<img class='stepimg' src='img/rince.jpg' alt='Femme qui rince ses cheveux sous la douche, la barre Heannah à la main' style='object-position:60% 40%'><p>Rince abondamment, deux fois plus longtemps que tu n'as massé."+(longs?" Profite du rinçage pour répartir la mousse sur tes longueurs.":"")+"</p><div class='duo'><img src='img/porte-savon.jpg' alt='Porte-savon en bambou'><p>Pose ta barre sur son porte-savon, <b>hors du jet d'eau</b>. C'est ce qui la fait durer 2 mois.</p></div>";
+    return "<img class='stepimg' src='img/rince.jpg' alt='Femme qui rince ses cheveux sous la douche, la barre Heannah à la main' style='object-position:60% 40%'><p>Rince abondamment, deux fois plus longtemps que tu n'as massé."+(longs?" Profite du rinçage pour répartir la mousse sur tes longueurs.":"")+"</p><div class='duo'><img src='img/porte-savon.webp' alt='Porte-savon en bambou'><p>Pose ta barre sur son porte-savon, <b>hors du jet d'eau</b>. C'est ce qui la fait durer 2 mois.</p></div>";
   }
   var TITLES=["Mouille","Applique","Masse","Rince et range"];
   // Changement d'étape : l'étape actuelle glisse dans le sens de la navigation, la suivante arrive de l'autre côté
