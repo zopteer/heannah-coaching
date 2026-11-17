@@ -58,8 +58,10 @@ p{margin:0}
 .stack{display:flex;flex-direction:column;gap:16px}
 .card{background:var(--carte);border:1px solid rgba(214,220,201,.7);border-radius:20px;padding:18px;display:flex;flex-direction:column;gap:12px;box-shadow:0 1px 2px rgba(31,39,22,.04),0 12px 32px -18px rgba(31,39,22,.28)}
 .hero{border-radius:24px;overflow:hidden;position:relative;box-shadow:0 24px 48px -24px rgba(31,39,22,.55);isolation:isolate}
-.hero img{width:100%;aspect-ratio:4/3;object-fit:cover;will-change:transform}
-.hero .over{position:absolute;inset:auto 0 0 0;padding:22px 20px 20px;background:linear-gradient(transparent,rgba(20,28,12,.55) 35%,rgba(20,28,12,.85));color:#fff;z-index:2}
+.hero{background:linear-gradient(160deg,#42582A,var(--vert) 60%,#2A3818)}
+.hero .ph{position:relative;overflow:hidden}
+.hero img{width:100%;aspect-ratio:760/600;object-fit:cover;object-position:50% 70%}
+.hero .over{position:relative;padding:18px 20px 20px;color:#fff}
 .hero .over h1{color:#fff;font-size:32px}
 .btn{position:relative;overflow:hidden;isolation:isolate;display:flex;align-items:center;justify-content:center;gap:8px;width:100%;border:0;border-radius:14px;padding:15px 18px;font-weight:800;background:linear-gradient(180deg,#42582A,var(--vert));color:#fff;text-decoration:none;font-size:16px;box-shadow:0 8px 20px -10px rgba(52,70,31,.7),inset 0 1px 0 rgba(255,255,255,.14)}
 .btn.ghost{background:transparent;color:var(--vert);border:1.5px solid var(--vert);box-shadow:none}
@@ -156,7 +158,7 @@ ol.err li{margin-bottom:6px}
 @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
 @keyframes fadeDown{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:none}}
 @keyframes drift{0%{transform:translate3d(0,0,0) rotate(0)}50%{transform:translate3d(4%,-3%,0) rotate(6deg)}100%{transform:translate3d(-3%,4%,0) rotate(-4deg)}}
-@keyframes zoom{from{transform:scale(1.28)}to{transform:scale(1.14)}}
+@keyframes zoom{from{transform:scale(1.08)}to{transform:scale(1)}}
 @keyframes wordUp{from{transform:translateY(110%) rotate(4deg)}to{transform:none}}
 @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(52,70,31,.35)}100%{box-shadow:0 0 0 22px rgba(52,70,31,0)}}
 @keyframes breathe{0%,100%{scale:1}50%{scale:1.035}}
@@ -175,7 +177,7 @@ ol.err li{margin-bottom:6px}
 .rv.in{opacity:1;transform:none;transition:opacity .6s cubic-bezier(.22,1,.36,1),transform .8s cubic-bezier(.22,1,.36,1)}
 
 /* Accueil */
-.hero img{animation:zoom 14s cubic-bezier(.22,1,.36,1) both}
+.hero img{animation:zoom 2.4s cubic-bezier(.22,1,.36,1) both}
 .hero .w{display:inline-block;overflow:hidden;vertical-align:bottom;padding-bottom:.1em;margin-bottom:-.1em}
 .hero .w > span{display:inline-block;animation:wordUp .9s cubic-bezier(.22,1,.36,1) both}
 .hero .over p{animation:rise .8s .55s cubic-bezier(.22,1,.36,1) both}
@@ -323,7 +325,7 @@ header.top{padding-top:max(16px,env(safe-area-inset-top));padding-left:max(16px,
   <!-- ACCUEIL -->
   <section class="view stack" id="v-accueil">
     <div class="hero">
-      <img src="img/hero.jpg" alt="Deux savons Heannah sur une plaque de marbre">
+      <div class="ph"><img src="img/hero.jpg" alt="Deux savons Heannah sur une plaque de marbre"></div>
       <div class="over stack" style="gap:6px">
         <h1>Ton coaching Heannah</h1>
         <p>8 semaines pour installer le rituel coréen du cuir chevelu.</p>
@@ -896,13 +898,12 @@ header.top{padding-top:max(16px,env(safe-area-inset-top));padding-left:max(16px,
   var bb=document.createElement("div");bb.className="bubbles";bb.setAttribute("aria-hidden","true");
   bb.innerHTML=[[10,14,9,0],[24,8,12,2.4],[45,18,10,4.6],[63,10,13,1.2],[78,22,11,3.6],[90,9,14,6.2],[36,12,15,7.8]].map(function(b){
     return "<i style='left:"+b[0]+"%;width:"+b[1]+"px;height:"+b[1]+"px;animation-duration:"+b[2]+"s;animation-delay:"+b[3]+"s'></i>";}).join("");
-  document.querySelector(".hero").appendChild(bb);
+  document.querySelector(".hero .ph").appendChild(bb);
 
   // En-tête vitré au défilement et léger parallaxe sur la photo
-  var hdr=document.querySelector("header.top"),heroImg=document.querySelector(".hero img"),ticking=false;
+  var hdr=document.querySelector("header.top"),ticking=false;
   function onScroll(){
     ticking=false;var y=window.scrollY;hdr.classList.toggle("scrolled",y>8);
-    if(!reduce&&curView==="accueil")heroImg.style.translate="0 "+Math.min(y*.2,20).toFixed(1)+"px";
   }
   window.addEventListener("scroll",function(){if(!ticking){ticking=true;requestAnimationFrame(onScroll);}},{passive:true});
 
